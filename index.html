@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Monthly SEO and marketing performance reports." />
+  <title>Client Performance Dashboard</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand"><div class="brand-mark">360</div><div><strong>Performance</strong><span>Reporting Hub</span></div></div>
+      <nav aria-label="Dashboard sections">
+        <button class="nav-item active" data-section="overview"><span>⌂</span>Overview</button>
+        <button class="nav-item" data-section="search"><span>⌕</span>Organic Search</button>
+        <button class="nav-item" data-section="local"><span>⌖</span>Google Business</button>
+        <button class="nav-item" data-section="events"><span>◈</span>Events & Bookings</button>
+      </nav>
+      <div class="sidebar-foot"><span class="live-dot"></span><div><strong>Manually verified</strong><small>From monthly client reports</small></div></div>
+    </aside>
+
+    <main>
+      <header class="topbar">
+        <button class="mobile-menu" id="menuButton" aria-label="Toggle menu">☰</button>
+        <div class="selectors">
+          <label>Client<select id="clientSelect" aria-label="Select client"></select></label>
+          <label>Reporting period<select id="monthSelect" aria-label="Select reporting month"></select></label>
+        </div>
+        <div class="top-meta"><span id="updatedLabel">Verified report data</span><div class="avatar">CD</div></div>
+      </header>
+
+      <div class="content">
+        <section class="hero-row">
+          <div><p class="eyebrow" id="sectionEyebrow">Performance overview</p><h1 id="pageTitle">Cafe del Mar</h1><p id="pageSubtitle">Your monthly digital performance, distilled into decisions.</p></div>
+          <div class="period-badge"><span>Reporting period</span><strong id="periodTitle">August 2026</strong></div>
+        </section>
+
+        <section id="overviewSection" class="dashboard-section active-section">
+          <div class="kpi-grid" id="primaryKpis"></div>
+          <div class="grid two-one">
+            <article class="card chart-card"><div class="card-head"><div><span class="overline">Organic search</span><h2>Clicks trend</h2></div><span class="pill">Monthly</span></div><div id="clickChart" class="line-chart"></div></article>
+            <article class="card signal-card" id="executiveSummary"></article>
+          </div>
+          <div class="grid thirds" id="channelHighlights"></div>
+        </section>
+
+        <section id="searchSection" class="dashboard-section">
+          <div class="kpi-grid" id="searchKpis"></div>
+          <div class="grid two-one">
+            <article class="card chart-card"><div class="card-head"><div><span class="overline">Search visibility</span><h2>Clicks & impressions</h2></div></div><div id="searchChart" class="line-chart"></div></article>
+            <article class="card" id="searchNotes"></article>
+          </div>
+        </section>
+
+        <section id="localSection" class="dashboard-section">
+          <div class="kpi-grid" id="localKpis"></div>
+          <article class="card chart-card"><div class="card-head"><div><span class="overline">Local discovery</span><h2>Google Business Profile activity</h2></div></div><div id="gbpChart" class="bar-chart"></div></article>
+        </section>
+
+        <section id="eventsSection" class="dashboard-section">
+          <div class="kpi-grid" id="eventKpis"></div>
+          <div class="grid two-one"><article class="card"><div class="card-head"><div><span class="overline">Lead attribution</span><h2>Enquiries by source</h2></div></div><div id="sourceBars" class="source-bars"></div></article><article class="card" id="eventNotes"></article></div>
+        </section>
+      </div>
+    </main>
+  </div>
+  <script src="./data.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
