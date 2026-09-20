@@ -8,4 +8,4 @@ Add or update a monthly record in `data.js`, then add its month key to the relev
 
 ## Deploy
 
-Import this repository into Vercel as a static project. No build command or environment variables are required.
+Import this repository into Vercel and configure `DASHBOARD_PASSWORD` as a Production and Preview environment variable. Every dashboard asset and report-data request is protected by a server-side session.
