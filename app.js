@@ -6,6 +6,7 @@ let monthId = D.clients[0].months[0];
 
 const fmt = (v, compact=false) => v == null ? 'Not reported' : new Intl.NumberFormat('en-AU', compact ? {notation:'compact',maximumFractionDigits:1} : {}).format(v);
 const money = v => v == null ? 'Not reported' : new Intl.NumberFormat('en-AU',{style:'currency',currency:'AUD',maximumFractionDigits:0}).format(v);
+const moneyPrecise = v => v == null ? 'Not reported' : new Intl.NumberFormat('en-AU',{style:'currency',currency:'AUD',minimumFractionDigits:2,maximumFractionDigits:2}).format(v);
 const delta = (a,b) => a != null && b ? ((a-b)/b)*100 : null;
 const signClass = v => v == null ? 'neutral' : v >= 0 ? 'positive' : 'negative';
 const changeText = v => v == null ? 'No comparison supplied' : `${v >= 0 ? '+' : ''}${v.toFixed(1)}% vs previous month`;
@@ -56,6 +57,21 @@ function render(){
   const sources=isMultiLocation?Object.entries(r.locations):Object.entries(r.events.sources), sourceMax=Math.max(...sources.map(x=>x[1]));
   document.querySelector('#sourceBars').innerHTML=sources.map(([name,val])=>`<div><div class="bar-label"><span>${name}</span><strong>${val}</strong></div><div class="bar-track"><i style="width:${val/sourceMax*100}%"></i></div></div>`).join('');
   document.querySelector('#eventNotes').innerHTML=isMultiLocation?`<span class="overline">Booking note</span><h2>Website requests by location</h2><p>These figures represent organic table-booking requests recorded on the website for Melbourne, Springvale, Queen Street and Fairfield.</p><div class="notice">Calls, online bookings and walk-ins from Google Business Profiles are not included.</div>`:`<span class="overline">Attribution note</span><h2>What the numbers include</h2><p>Event enquiry and guest figures come from the supplied Tripleseat report. “Other” and unattributed leads may include search-influenced customers who did not select a source.</p><div class="notice">Google Business Profile calls, directions and Reserve actions are not included in website booking totals.</div>`;
+
+  const ads=r.googleAds;
+  document.querySelector('#adsContent').innerHTML=!ads?`<article class="card empty-state"><span class="overline">Google Ads</span><h2>No paid media report supplied</h2><p>Google Ads data is not available for ${r.label}.</p></article>`:`
+    <div class="kpi-grid ads-kpis">
+      ${noChangeKpi('Ad clicks',fmt(ads.clicks),'Paid search traffic','↗')}
+      ${noChangeKpi('Impressions',fmt(ads.impressions),'Google Ads reach','◉')}
+      ${noChangeKpi('Conversions',fmt(ads.conversions),'Tracked actions','◆')}
+      ${noChangeKpi('Ad spend',money(ads.spend),'Total media cost','A$')}
+      ${noChangeKpi('Cost / conversion',moneyPrecise(ads.costPerConversion),'Average CPA','÷')}
+      ${noChangeKpi('CTR',ads.ctr.toFixed(2)+'%','Click-through rate','%')}
+      ${noChangeKpi('Phone calls',fmt(ads.calls),'Tracked calls','☎')}
+      ${noChangeKpi('Quality calls',fmt(ads.qualityCalls),'Calls over 2 minutes','✓')}
+    </div>
+    <div class="campaign-grid">${ads.campaigns.map(c=>`<article class="card campaign-card"><span class="overline">Search campaign</span><h2>${c.name}</h2><div class="campaign-stats"><span>Clicks<strong>${fmt(c.clicks)}</strong></span><span>Impressions<strong>${fmt(c.impressions)}</strong></span><span>Conversions<strong>${fmt(c.conversions)}</strong></span><span>Cost<strong>${money(c.cost)}</strong></span></div><h3>Business Profile asset</h3><div class="profile-stats"><span>${fmt(c.profile.clicks)} clicks</span><span>${fmt(c.profile.impressions)} impressions</span><span>${c.profile.ctr.toFixed(2)}% CTR</span><span>${moneyPrecise(c.profile.cpc)} avg. CPC</span><span>${moneyPrecise(c.profile.cost)} cost</span></div></article>`).join('')}</div>
+    <article class="card ads-note"><span class="overline">July result</span><h2>Strong lead volume across both Search campaigns</h2><p>${fmt(ads.conversions)} tracked actions were generated from ${money(ads.spend)} spend. Café del Mar led impression share for both campaigns, and ${ads.qualityCalls} of ${ads.calls} calls lasted over two minutes.</p></article>`;
 }
 
 clientSelect.addEventListener('change',e=>{clientId=e.target.value;populateMonths();render()}); monthSelect.addEventListener('change',e=>{monthId=e.target.value;render()});
